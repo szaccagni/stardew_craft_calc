@@ -1,6 +1,5 @@
-from flask import Flask, render_template
-from bs4 import BeautifulSoup
-import requests
+from flask import Flask, render_template, request, redirect, url_for
+import models, seed
 
 app = Flask(__name__)
 
@@ -8,54 +7,18 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/recipes")
+@app.route("/cooking")
 def cooking():
-    class Recipe:
-        def __init__(self, name):
-            self.name = name
-            self.ingredients = {}
+    return render_template('recipes.html', ingredients=models.ingredients, recipes=models.recipes, fridge_items=models.fridge_items)
 
-    def __str__(self):
-        return self.name
-        
-    def parseIngredients(recipe, ingredients):
-        ingredients_list = ingredients.split()
-        ingredients_list = ingredients_list[::-1]
-        while (len(ingredients_list) > 0):
-            if ingredients_list[0][1].isnumeric():
-                quant = ingredients_list.pop(0).strip('()')
-                ingredient = ingredients_list.pop(0)
-                while (len(ingredients_list) > 0 and not ingredients_list[0][1].isnumeric()):
-                    if ingredients_list[0] == '(Any)':
-                        ingredients_list.pop(0)
-                    else:
-                        ingredient = ingredients_list.pop(0) + ' ' + ingredient
-            recipe.ingredients[ingredient] = quant
+@app.route("/add",  methods=["POST"])
+def build_fridge():
+    quant = request.form["quantity"]
+    ingredient = request.form["ingredient"]
+    new_item = models.FridgeItem(ingredient, quant)
+    models.fridge_items.append(new_item)
+    return redirect(url_for('cooking'))
 
-    page_to_scrape = requests.get('https://stardewvalleywiki.com/Cooking')
-    soup = BeautifulSoup(page_to_scrape.text, 'html.parser')
-    recipe_header = soup.find('h2', string='Recipes')
-    recipes_html = recipe_header.findNext('table')
-    headers_html = recipes_html.findAll('tr')[0].findAll('th')
-    headers = []
-    for header in headers_html:
-        headers.append(header.text)
-
-    recipes = []
-
-    for row in recipes_html.find('tbody').children:
-        if len(list(row)) > 1:
-            data = row.findAll('td')
-            if len(data) > 1:
-                recipe = Recipe(data[headers.index('Name')].text.rstrip('\n'))
-                recipes.append(recipe)
-                parseIngredients(recipe, data[headers.index('Ingredients')].text)
-
-    all_ingredients = []
-
-    for recipe in recipes:
-        for ingredient in recipe.ingredients.keys():
-            if not ingredient in list(r.name for r in recipes) and not ingredient in all_ingredients:
-                all_ingredients.append(ingredient)
-
-    return render_template('recipes.html', ingredients=all_ingredients, recipes=recipes)
+if __name__ == "__main__":
+    seed.seed_data()
+    app.run()
