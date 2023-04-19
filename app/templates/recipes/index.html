@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h3>Ingredients List</h3>
+    {% if ingredients %}
+        {% for ingredient in ingredients %}
+            <p>{{ingredient.name}}</p>
+        {% endfor %}
+    {% else %}
+        <p>empty</p>
+    {% endif %}
+{% endblock %}
