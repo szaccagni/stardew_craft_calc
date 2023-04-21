@@ -5,4 +5,3 @@ This web app allows aims to assist you in your Stardew Valley kitchen. You can i
 ## Techologies
 * Python
 * Flask
-* Beautiful Soup - scrapping https://stardewvalleywiki.com/Cooking 
