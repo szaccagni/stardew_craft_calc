@@ -5,3 +5,4 @@ This web app allows aims to assist you in your Stardew Valley kitchen. You can i
 ## Techologies
 * Python
 * Flask
+* Custom web app I've built to help scrap data from the stardew wiki - see code [here](https://github.com/szaccagni/stardew-scraper)
