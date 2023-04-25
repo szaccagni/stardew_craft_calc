@@ -1,5 +1,7 @@
 from app.extensions import db
 
+FRIDGE_ITEMS = {}
+
 recipe_ingredient = db.Table('recipe_ingredient',
                              db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
                              db.Column('ingredient_id', db.Integer, db.ForeignKey('ingredient.id')), 
@@ -12,3 +14,15 @@ class Recipe(db.Model):
 
     def __repr__(self):
         return f'<Recipe {self.name}>'
+
+
+def empty_fridge():
+    FRIDGE_ITEMS.clear()
+
+def add_fridge_item(ingredient, quant):
+    if ingredient in FRIDGE_ITEMS.keys():
+        FRIDGE_ITEMS[ingredient] += int(quant)
+    else:
+        FRIDGE_ITEMS[ingredient] = int(quant)
+    print(FRIDGE_ITEMS)
+

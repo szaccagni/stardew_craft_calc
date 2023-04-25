@@ -1,18 +1,32 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div style="display:flex">
+<div class="flex-container">
     <div>
-        <h3>Ingredients List</h3>
-        {% if ingredients %}
-            {% for ingredient in ingredients %}
-                <p>{{ingredient.name}}</p>
-            {% endfor %}
-        {% else %}
-            <p>empty</p>
-        {% endif %}
+        <h3>What's in Your Fridge?</h3>
+        <form action="/recipes/fridge" method="POST">
+            <div>
+                <select name="ingredient" required>
+                    <option></option>
+                {% for ingredient in ingredients %}
+                    <option>{{ingredient.name}}</option>
+                {% endfor %}            
+                </select>
+            </div>
+            <div>
+                <input placeholder="quantity" name="quant" type="number" required>
+            </div>
+            <div><input type="submit"></div>
+        </form>
     </div>
     <div>
+        {% if fridge_items %}
+            {% for item in fridge_items %}
+                <p>{{item}} - {{fridge_items[item]}}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <!-- <div>
         <h3>Recipe List</h3>
         {% if recipes %}
             {% for recipe in recipes %}
@@ -21,6 +35,6 @@
         {% else %}
             <p>empty</p>
         {% endif %}
-    </div>
+    </div> -->
 </div>
 {% endblock %}
