@@ -4,7 +4,7 @@ from flask.cli import with_appcontext
 from config import Config
 from app.extensions import db
 
-from db_utils import add_ingredients, add_recipes
+from db_utils import add_ingredients, add_recipe_ingredients
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -25,7 +25,7 @@ def create_app(config_class=Config):
         db.drop_all()
         db.create_all()
         add_ingredients()
-        add_recipes()
+        add_recipe_ingredients()
 
     @app.route('/test/')
     def test_page():
