@@ -1,7 +1,10 @@
 from flask import Flask
+from flask.cli import with_appcontext
 
 from config import Config
 from app.extensions import db
+
+from db_utils import add_ingredients, add_recipes
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -16,6 +19,13 @@ def create_app(config_class=Config):
 
     from app.recipes import bp as recipes_bp
     app.register_blueprint(recipes_bp, url_prefix='/recipes')
+
+    @app.cli.command("init-db")
+    def update_db_cmd():    
+        db.drop_all()
+        db.create_all()
+        add_ingredients()
+        add_recipes()
 
     @app.route('/test/')
     def test_page():

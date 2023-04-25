@@ -1,12 +1,26 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <h3>Ingredients List</h3>
-    {% if ingredients %}
-        {% for ingredient in ingredients %}
-            <p>{{ingredient.name}}</p>
-        {% endfor %}
-    {% else %}
-        <p>empty</p>
-    {% endif %}
+<div style="display:flex">
+    <div>
+        <h3>Ingredients List</h3>
+        {% if ingredients %}
+            {% for ingredient in ingredients %}
+                <p>{{ingredient.name}}</p>
+            {% endfor %}
+        {% else %}
+            <p>empty</p>
+        {% endif %}
+    </div>
+    <div>
+        <h3>Recipe List</h3>
+        {% if recipes %}
+            {% for recipe in recipes %}
+                <p>{{recipe.name}}</p>
+            {% endfor %}
+        {% else %}
+            <p>empty</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
