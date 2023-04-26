@@ -1,4 +1,5 @@
 from app.extensions import db
+import sqlite3
 
 FRIDGE_ITEMS = {}
 
@@ -15,7 +16,6 @@ class Recipe(db.Model):
     def __repr__(self):
         return f'<Recipe {self.name}>'
 
-
 def empty_fridge():
     FRIDGE_ITEMS.clear()
 
@@ -26,3 +26,11 @@ def add_fridge_item(ingredient, quant):
         FRIDGE_ITEMS[ingredient] = int(quant)
     print(FRIDGE_ITEMS)
 
+
+def execute_query(query):
+    connection = sqlite3.connect('app.db')
+    cursor = connection.cursor()
+    cursor.execute(query)
+    result = cursor.fetchall()
+    connection.close()
+    return result

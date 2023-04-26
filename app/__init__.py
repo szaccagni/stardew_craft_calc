@@ -27,8 +27,4 @@ def create_app(config_class=Config):
         add_ingredients()
         add_recipe_ingredients()
 
-    @app.route('/test/')
-    def test_page():
-        return '<h1>Testing the Flask Application Factory Pattern</h1>'
-
     return app
